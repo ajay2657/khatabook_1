@@ -285,7 +285,7 @@ const CustomerList = () => {
                           <button
                             onClick={async (e) => {
                               e.stopPropagation();
-                              if (!confirm('हा ग्राहक व त्याचे संबंधीत व्यवहार हटवायचे आहेत का?')) return;
+                              if (!window.confirm('हा ग्राहक व त्याचे संबंधीत व्यवहार हटवायचे आहेत का?')) return;
                               try {
                                 await api.deleteCustomer(customer.id);
                                 alert('ग्राहक हटवला गेला.');
