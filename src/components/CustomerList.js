@@ -10,6 +10,7 @@ const CustomerList = () => {
   const [showAddTransaction, setShowAddTransaction] = useState(false);
   const [showTransactionModal, setShowTransactionModal] = useState(false);
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+  const [editingCustomer, setEditingCustomer] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const { customers, loading, totalBalance } = useCustomersWithBalance(searchQuery);
@@ -117,7 +118,7 @@ const CustomerList = () => {
         {/* Action Buttons */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
           <button
-            onClick={() => setShowAddCustomer(true)}
+            onClick={() => { setEditingCustomer(null); setShowAddCustomer(true); }}
             className="p-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
           >
             ➕ नवीन ग्राहक जोडा
@@ -237,6 +238,9 @@ const CustomerList = () => {
                     <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                       बाकी रक्कम (₹)
                     </th>
+                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      क्रिया
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -264,6 +268,38 @@ const CustomerList = () => {
                           : 'text-green-600'
                       }`}>
                         {customer.balance.toFixed(2)}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
+                        <div className="inline-flex items-center space-x-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setShowAddCustomer(true);
+                              // pass the customer data to AddCustomer via state
+                              setEditingCustomer(customer);
+                            }}
+                            className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600 text-sm"
+                          >
+                            संपादित करा
+                          </button>
+                          <button
+                            onClick={async (e) => {
+                              e.stopPropagation();
+                              if (!confirm('हा ग्राहक व त्याचे संबंधीत व्यवहार हटवायचे आहेत का?')) return;
+                              try {
+                                await api.deleteCustomer(customer.id);
+                                alert('ग्राहक हटवला गेला.');
+                                refreshCustomers();
+                              } catch (err) {
+                                console.error('Delete error:', err);
+                                alert('ग्राहक हटविण्यात त्रुटी: ' + (err?.response?.data?.error || err.message || 'अज्ञात त्रुटी'));
+                              }
+                            }}
+                            className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 text-sm"
+                          >
+                            हटवा
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -314,8 +350,9 @@ const CustomerList = () => {
       {/* Modals */}
       {showAddCustomer && (
         <AddCustomer 
-          onClose={() => setShowAddCustomer(false)} 
-          refreshCustomers={refreshCustomers} 
+          onClose={() => { setShowAddCustomer(false); setEditingCustomer(null); }} 
+          refreshCustomers={refreshCustomers}
+          customer={editingCustomer}
         />
       )}
       

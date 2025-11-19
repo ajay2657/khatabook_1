@@ -18,6 +18,16 @@ const api = {
     const response = await axios.get(`${API_BASE_URL}/customers/${id}`);
     return response.data;
   },
+  
+  updateCustomer: async (id, customer) => {
+    const response = await axios.put(`${API_BASE_URL}/customers/${id}`, customer);
+    return response.data;
+  },
+
+  deleteCustomer: async (id) => {
+    const response = await axios.delete(`${API_BASE_URL}/customers/${id}`);
+    return response.data;
+  },
 
   // Transactions
   getTransactions: async () => {
