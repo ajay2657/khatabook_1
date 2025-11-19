@@ -1,19 +1,11 @@
 import React, { useState } from 'react';
 import api from '../api/client';
 
-<<<<<<< HEAD
 const AddCustomer = ({ onClose, refreshCustomers, customer }) => {
   const [formData, setFormData] = useState({
     name: customer?.name || '',
     village: customer?.village || '',
     phone: customer?.phone || ''
-=======
-const AddCustomer = ({ onClose, refreshCustomers }) => {
-  const [formData, setFormData] = useState({
-    name: '',
-    village: '',
-    phone: ''
->>>>>>> 4795440 (added files)
   });
   const [loading, setLoading] = useState(false);
 
@@ -26,7 +18,6 @@ const AddCustomer = ({ onClose, refreshCustomers }) => {
 
     setLoading(true);
     try {
-<<<<<<< HEAD
       if (customer && customer._id) {
         await api.updateCustomer(customer._id, {
           name: formData.name.trim(),
@@ -42,14 +33,6 @@ const AddCustomer = ({ onClose, refreshCustomers }) => {
         });
         alert('ग्राहक यशस्वीरित्या जतन झाला.');
       }
-=======
-      await api.addCustomer({
-        name: formData.name.trim(),
-        village: formData.village?.trim() || '',
-        phone: formData.phone?.trim() || ''
-      });
-      alert('ग्राहक यशस्वीरित्या जतन झाला.');
->>>>>>> 4795440 (added files)
       onClose();
       refreshCustomers();
     } catch (err) {
@@ -71,11 +54,7 @@ const AddCustomer = ({ onClose, refreshCustomers }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
         <div className="p-6">
-<<<<<<< HEAD
           <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">{customer ? 'ग्राहक संपादित करा' : 'नवीन ग्राहक जोडा'}</h2>
-=======
-          <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">नवीन ग्राहक जोडा</h2>
->>>>>>> 4795440 (added files)
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">नाव *</label>
@@ -128,11 +107,7 @@ const AddCustomer = ({ onClose, refreshCustomers }) => {
                 className="px-6 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
                 disabled={loading}
               >
-<<<<<<< HEAD
                 {loading ? (customer ? 'अद्यतनित करत आहे...' : 'जतन होत आहे...') : (customer ? 'अद्यतनित करा' : 'जतन करा')}
-=======
-                {loading ? 'जतन होत आहे...' : 'जतन करा'}
->>>>>>> 4795440 (added files)
               </button>
             </div>
           </form>

@@ -1,10 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Customer = require('../models/customer');
-<<<<<<< HEAD
 const Transaction = require('../models/transaction');
-=======
->>>>>>> 4795440 (added files)
 
 // GET /api/customers
 router.get('/', async (req, res) => {
@@ -39,7 +36,6 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
 // PUT /api/customers/:id - update customer
 router.put('/:id', async (req, res) => {
   try {
@@ -71,6 +67,4 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-=======
->>>>>>> 4795440 (added files)
 module.exports = router;

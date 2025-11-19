@@ -10,10 +10,7 @@ const CustomerList = () => {
   const [showAddTransaction, setShowAddTransaction] = useState(false);
   const [showTransactionModal, setShowTransactionModal] = useState(false);
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
-<<<<<<< HEAD
   const [editingCustomer, setEditingCustomer] = useState(null);
-=======
->>>>>>> 4795440 (added files)
   const [searchQuery, setSearchQuery] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const { customers, loading, totalBalance } = useCustomersWithBalance(searchQuery);
@@ -121,11 +118,7 @@ const CustomerList = () => {
         {/* Action Buttons */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
           <button
-<<<<<<< HEAD
             onClick={() => { setEditingCustomer(null); setShowAddCustomer(true); }}
-=======
-            onClick={() => setShowAddCustomer(true)}
->>>>>>> 4795440 (added files)
             className="p-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
           >
             ➕ नवीन ग्राहक जोडा
@@ -245,12 +238,9 @@ const CustomerList = () => {
                     <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                       बाकी रक्कम (₹)
                     </th>
-<<<<<<< HEAD
                     <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                       क्रिया
                     </th>
-=======
->>>>>>> 4795440 (added files)
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -279,7 +269,6 @@ const CustomerList = () => {
                       }`}>
                         {customer.balance.toFixed(2)}
                       </td>
-<<<<<<< HEAD
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
                         <div className="inline-flex items-center space-x-2">
                           <button
@@ -296,7 +285,7 @@ const CustomerList = () => {
                           <button
                             onClick={async (e) => {
                               e.stopPropagation();
-                              if (!window.confirm('हा ग्राहक व त्याचे संबंधीत व्यवहार हटवायचे आहेत का?')) return;
+                              if (!confirm('हा ग्राहक व त्याचे संबंधीत व्यवहार हटवायचे आहेत का?')) return;
                               try {
                                 await api.deleteCustomer(customer.id);
                                 alert('ग्राहक हटवला गेला.');
@@ -312,8 +301,6 @@ const CustomerList = () => {
                           </button>
                         </div>
                       </td>
-=======
->>>>>>> 4795440 (added files)
                     </tr>
                   ))}
                   
@@ -363,14 +350,9 @@ const CustomerList = () => {
       {/* Modals */}
       {showAddCustomer && (
         <AddCustomer 
-<<<<<<< HEAD
           onClose={() => { setShowAddCustomer(false); setEditingCustomer(null); }} 
           refreshCustomers={refreshCustomers}
           customer={editingCustomer}
-=======
-          onClose={() => setShowAddCustomer(false)} 
-          refreshCustomers={refreshCustomers} 
->>>>>>> 4795440 (added files)
         />
       )}
       
