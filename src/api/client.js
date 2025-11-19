@@ -18,6 +18,7 @@ const api = {
     const response = await axios.get(`${API_BASE_URL}/customers/${id}`);
     return response.data;
   },
+<<<<<<< HEAD
   
   updateCustomer: async (id, customer) => {
     const response = await axios.put(`${API_BASE_URL}/customers/${id}`, customer);
@@ -28,6 +29,8 @@ const api = {
     const response = await axios.delete(`${API_BASE_URL}/customers/${id}`);
     return response.data;
   },
+=======
+>>>>>>> 4795440 (added files)
 
   // Transactions
   getTransactions: async () => {
