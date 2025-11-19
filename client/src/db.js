@@ -3,7 +3,6 @@ import Dexie from 'dexie';
 class RaviUdhariVahiDB extends Dexie {
   constructor() {
     super('RaviUdhariVahi_v3');
-    // Keep historical version then upgrade to ensure index exists
     this.version(1).stores({
       customers: '++id, name, village, phone',
       transactions: '++id, customer_id, date, description, credit, debit'

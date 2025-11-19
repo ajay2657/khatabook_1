@@ -35,7 +35,6 @@ const AddTransaction = ({
         const list = await api.getCustomers();
         if (mounted) {
           setCustomers(list);
-          // If selectedCustomerId is provided, set it in form
           if (selectedCustomerId) {
             setFormData(prev => ({ ...prev, customerId: selectedCustomerId }));
           }
@@ -265,7 +264,7 @@ const AddTransaction = ({
                 value={formData.description}
                 onChange={handleChange}
                 className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder={formData.type === 'debit' ? 'वसुलीबद्दल नोट' : 'व्यवहाराचे वर्णन'}
+                placeholder={formData.type === 'debit' ? 'वसुलीबद्दल नोट' : 'व्यवाहराचे वर्णन'}
                 required={formData.type !== 'debit'}
                 disabled={loading}
               />

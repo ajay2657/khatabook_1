@@ -12,7 +12,6 @@ export const useCustomersWithBalance = (searchQuery = '') => {
     let mounted = true;
     const fetchData = async () => {
       try {
-        // Get all customers and transactions in parallel
         const [customers, transactions] = await Promise.all([
           api.getCustomers(),
           api.getTransactions()
@@ -20,16 +19,14 @@ export const useCustomersWithBalance = (searchQuery = '') => {
 
         if (!mounted) return;
 
-        // Calculate balance for each customer
         const customersWithBalance = customers.map(customer => {
           const customerTransactions = transactions.filter(t => 
             (typeof t.customer_id === 'object' ? t.customer_id._id : t.customer_id) === customer._id
           );
           const balance = customerTransactions.reduce((sum, t) => sum + (t.credit - t.debit), 0);
-          return { ...customer, balance, id: customer._id }; // Map MongoDB _id to id for compatibility
+          return { ...customer, balance, id: customer._id };
         });
 
-        // Filter by search
         const filtered = customersWithBalance.filter(c => 
           !searchQuery || 
           c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -37,7 +34,6 @@ export const useCustomersWithBalance = (searchQuery = '') => {
           (c.id && c.id.toString().includes(searchQuery))
         );
 
-        // Sort by balance DESC, then name ASC
         filtered.sort((a, b) => {
           if (b.balance !== a.balance) return b.balance - a.balance;
           return a.name.localeCompare(b.name);

@@ -123,7 +123,7 @@ const CustomerList = () => {
           >
             ➕ नवीन ग्राहक जोडा
           </button>
-          
+
           <button
             onClick={handleAddTransactionClick}
             className="p-4 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -131,7 +131,7 @@ const CustomerList = () => {
             💰 नवीन व्यवहार नोंदवा
           </button>
           {/* Removed separate receive-payment button; handled inside New Transaction */}
-          
+
           <button
             onClick={() => { setShowAddTransaction(false); if (selectedCustomerId) setShowTransactionModal(true); }}
             disabled={!selectedCustomerId}
@@ -139,7 +139,7 @@ const CustomerList = () => {
           >
             📋 ग्राहक व्यवहार पहा
           </button>
-          
+
           <button
             onClick={exportToCSV}
             disabled={customers.length === 0}
@@ -147,7 +147,7 @@ const CustomerList = () => {
           >
             📊 CSV निर्यात करा
           </button>
-          
+
           <button
             onClick={backupDatabase}
             className="p-4 bg-gray-600 text-white rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
@@ -218,7 +218,7 @@ const CustomerList = () => {
                 ग्राहक यादी ({customerCount} एकूण)
               </h3>
             </div>
-            
+
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
@@ -262,11 +262,10 @@ const CustomerList = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {customer.phone || '-'}
                       </td>
-                      <td className={`px-6 py-4 whitespace-nowrap text-sm font-bold text-right ${
-                        customer.balance >= 0 
-                          ? 'text-red-600' 
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm font-bold text-right ${customer.balance >= 0
+                          ? 'text-red-600'
                           : 'text-green-600'
-                      }`}>
+                        }`}>
                         {customer.balance.toFixed(2)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
@@ -285,7 +284,7 @@ const CustomerList = () => {
                           <button
                             onClick={async (e) => {
                               e.stopPropagation();
-                              if (!confirm('हा ग्राहक व त्याचे संबंधीत व्यवहार हटवायचे आहेत का?')) return;
+                              if (!window.confirm('हा ग्राहक व त्याचे संबंधीत व्यवहार हटवायचे आहेत का?')) return;
                               try {
                                 await api.deleteCustomer(customer.id);
                                 alert('ग्राहक हटवला गेला.');
@@ -303,7 +302,7 @@ const CustomerList = () => {
                       </td>
                     </tr>
                   ))}
-                  
+
                   {customers.length === 0 && !searchQuery && (
                     <tr>
                       <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
@@ -313,7 +312,7 @@ const CustomerList = () => {
                       </td>
                     </tr>
                   )}
-                  
+
                   {customers.length === 0 && searchQuery && (
                     <tr>
                       <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
@@ -349,13 +348,13 @@ const CustomerList = () => {
 
       {/* Modals */}
       {showAddCustomer && (
-        <AddCustomer 
-          onClose={() => { setShowAddCustomer(false); setEditingCustomer(null); }} 
+        <AddCustomer
+          onClose={() => { setShowAddCustomer(false); setEditingCustomer(null); }}
           refreshCustomers={refreshCustomers}
           customer={editingCustomer}
         />
       )}
-      
+
       {showAddTransaction && (
         <AddTransaction
           selectedCustomerId={selectedCustomerId}
@@ -364,7 +363,7 @@ const CustomerList = () => {
           refreshCustomers={refreshCustomers}
         />
       )}
-      
+
       {showTransactionModal && selectedCustomerId && (
         <TransactionModal
           customerId={selectedCustomerId}

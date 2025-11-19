@@ -18,24 +18,18 @@
     "nodemon": "^3.1.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-scripts": "^5.0.1",
+    "react-scripts": "^0.0.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "start": "npm run start:client",
+    "start:client": "cd client && npm start",
+    "build:client": "cd client && npm run build",
+    "start:server": "cd server && npm start",
     "server": "node server/index.js",
     "server:dev": "nodemon server/index.js",
-    "dev": "concurrently \"npm run server:dev\" \"npm start\"",
-    "prod": "npm run build && npm run server"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "dev": "concurrently \"npm run server:dev\" \"npm run start:client\"",
+    "prod": "npm run build:client && npm run server"
   },
   "browserslist": {
     "production": [
