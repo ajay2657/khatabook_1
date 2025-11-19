@@ -18,6 +18,7 @@ const CustomerList = () => {
 
   const refreshCustomers = useCallback(() => {
     setIsRefreshing(true);
+    // Force a re-render by updating search query temporarily
     setSearchQuery(prev => prev + ' ');
     setTimeout(() => {
       setSearchQuery(prev => prev.trim());
@@ -26,10 +27,12 @@ const CustomerList = () => {
   }, []);
 
   const handleRowClick = useCallback((id) => {
+    // Only select the customer; do not open any modal automatically
     setSelectedCustomerId(id);
   }, []);
 
   const handleAddTransactionClick = useCallback(() => {
+    // Ensure only one modal is visible at a time
     setShowTransactionModal(false);
     setShowAddTransaction(true);
   }, []);
@@ -52,7 +55,8 @@ const CustomerList = () => {
       ].join(','))
     ].join('\n');
 
-    const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvRows], { type: 'text/csv;charset=utf-8;' });
+    // Create and download CSV
+    const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvRows], { type: 'text/csv;charset=utf-8;' }); // UTF-8 BOM for Excel
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
@@ -67,11 +71,13 @@ const CustomerList = () => {
 
   const backupDatabase = useCallback(async () => {
     try {
+      // Get all data from API
       const [customers, transactions] = await Promise.all([
         api.getCustomers(),
         api.getTransactions()
       ]);
 
+      // Create backup payload
       const backupPayload = {
         customers,
         transactions
@@ -117,14 +123,15 @@ const CustomerList = () => {
           >
             ➕ नवीन ग्राहक जोडा
           </button>
-          
+
           <button
             onClick={handleAddTransactionClick}
             className="p-4 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             💰 नवीन व्यवहार नोंदवा
           </button>
-          
+          {/* Removed separate receive-payment button; handled inside New Transaction */}
+
           <button
             onClick={() => { setShowAddTransaction(false); if (selectedCustomerId) setShowTransactionModal(true); }}
             disabled={!selectedCustomerId}
@@ -132,7 +139,7 @@ const CustomerList = () => {
           >
             📋 ग्राहक व्यवहार पहा
           </button>
-          
+
           <button
             onClick={exportToCSV}
             disabled={customers.length === 0}
@@ -140,7 +147,7 @@ const CustomerList = () => {
           >
             📊 CSV निर्यात करा
           </button>
-          
+
           <button
             onClick={backupDatabase}
             className="p-4 bg-gray-600 text-white rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
@@ -211,7 +218,7 @@ const CustomerList = () => {
                 ग्राहक यादी ({customerCount} एकूण)
               </h3>
             </div>
-            
+
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
@@ -255,11 +262,10 @@ const CustomerList = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {customer.phone || '-'}
                       </td>
-                      <td className={`px-6 py-4 whitespace-nowrap text-sm font-bold text-right ${
-                        customer.balance >= 0 
-                          ? 'text-red-600' 
+                      <td className={`px-6 py-4 whitespace-nowrap text-sm font-bold text-right ${customer.balance >= 0
+                          ? 'text-red-600'
                           : 'text-green-600'
-                      }`}>
+                        }`}>
                         {customer.balance.toFixed(2)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
@@ -268,6 +274,7 @@ const CustomerList = () => {
                             onClick={(e) => {
                               e.stopPropagation();
                               setShowAddCustomer(true);
+                              // pass the customer data to AddCustomer via state
                               setEditingCustomer(customer);
                             }}
                             className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600 text-sm"
@@ -295,7 +302,7 @@ const CustomerList = () => {
                       </td>
                     </tr>
                   ))}
-                  
+
                   {customers.length === 0 && !searchQuery && (
                     <tr>
                       <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
@@ -305,7 +312,7 @@ const CustomerList = () => {
                       </td>
                     </tr>
                   )}
-                  
+
                   {customers.length === 0 && searchQuery && (
                     <tr>
                       <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
@@ -341,13 +348,13 @@ const CustomerList = () => {
 
       {/* Modals */}
       {showAddCustomer && (
-        <AddCustomer 
-          onClose={() => { setShowAddCustomer(false); setEditingCustomer(null); }} 
+        <AddCustomer
+          onClose={() => { setShowAddCustomer(false); setEditingCustomer(null); }}
           refreshCustomers={refreshCustomers}
           customer={editingCustomer}
         />
       )}
-      
+
       {showAddTransaction && (
         <AddTransaction
           selectedCustomerId={selectedCustomerId}
@@ -356,7 +363,7 @@ const CustomerList = () => {
           refreshCustomers={refreshCustomers}
         />
       )}
-      
+
       {showTransactionModal && selectedCustomerId && (
         <TransactionModal
           customerId={selectedCustomerId}

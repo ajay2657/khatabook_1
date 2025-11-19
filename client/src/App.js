@@ -1,5 +1,6 @@
 import React from 'react';
 import CustomerList from './components/CustomerList';
+import './App.css';
 import './index.css'; // Tailwind CSS is imported here
 
 function App() {
