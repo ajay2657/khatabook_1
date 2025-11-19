@@ -3,13 +3,12 @@
 services:
   - type: web
     name: ravi-udhary-server
-    # use node environment
     env: node
     region: oregon
     plan: starter
-    # Install and run from server/ to avoid installing frontend deps on Render
-    buildCommand: "cd server && npm install"
-    startCommand: "cd server && npm start"
+    # Run dependency install for the repo (root) then start the server from server/index.js
+    buildCommand: "npm install"
+    startCommand: "node server/index.js"
     autoDeploy: true
     # Optional: set a health check path if you add one (e.g. /health)
     # healthCheckPath: "/"
