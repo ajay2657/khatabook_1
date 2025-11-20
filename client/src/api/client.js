@@ -18,7 +18,7 @@ const api = {
     const response = await axios.get(`${API_BASE_URL}/customers/${id}`);
     return response.data;
   },
-  
+
   updateCustomer: async (id, customer) => {
     const response = await axios.put(`${API_BASE_URL}/customers/${id}`, customer);
     return response.data;
@@ -37,6 +37,12 @@ const api = {
 
   addTransaction: async (transaction) => {
     const response = await axios.post(`${API_BASE_URL}/transactions`, transaction);
+    return response.data;
+  },
+
+  // Auth
+  login: async (credentials) => {
+    const response = await axios.post(`${API_BASE_URL}/auth/login`, credentials);
     return response.data;
   }
 };

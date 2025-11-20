@@ -1,11 +1,15 @@
 {
-  "buildCommand": "npm run build",
+  "buildCommand": "cd client && npm install && npm run build",
   "devCommand": "npm start",
-  "outputDirectory": "build",
+  "outputDirectory": "client/build",
   "rewrites": [
     {
-      "source": "/api/:path*",
-      "destination": "https://your-backend-url.vercel.app/api/:path*"
+      "source": "/api/(.*)",
+      "destination": "/server/index.js"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
