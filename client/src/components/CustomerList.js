@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 import { useCustomersWithBalance, useCustomerCount } from '../hooks/useCustomers';
 import AddCustomer from './AddCustomer';
 import AddTransaction from './AddTransaction';
@@ -15,6 +16,7 @@ const CustomerList = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const { customers, loading, totalBalance } = useCustomersWithBalance(searchQuery);
   const customerCount = useCustomerCount();
+  const { logout } = useContext(AuthContext);
 
   const refreshCustomers = useCallback(() => {
     setIsRefreshing(true);
@@ -106,11 +108,19 @@ const CustomerList = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <h1 className="text-3xl font-bold text-gray-900 text-center">
-            रवी उधारी वही - RAVI ELECTRICAL AND MACHINERIES
-          </h1>
-          <p className="text-center text-gray-600 mt-2">ग्राहक व्यवस्थापन प्रणाली</p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">
+              रवी उधारी वही - RAVI ELECTRICAL AND MACHINERIES
+            </h1>
+            <p className="text-gray-600 mt-2">ग्राहक व्यवस्थापन प्रणाली</p>
+          </div>
+          <button
+            onClick={logout}
+            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+          >
+            बाहेर पडा (Logout)
+          </button>
         </div>
       </div>
 
@@ -263,8 +273,8 @@ const CustomerList = () => {
                         {customer.phone || '-'}
                       </td>
                       <td className={`px-6 py-4 whitespace-nowrap text-sm font-bold text-right ${customer.balance >= 0
-                          ? 'text-red-600'
-                          : 'text-green-600'
+                        ? 'text-red-600'
+                        : 'text-green-600'
                         }`}>
                         {customer.balance.toFixed(2)}
                       </td>
