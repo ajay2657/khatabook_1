@@ -16,24 +16,31 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// Routes
-app.use('/api/customers', customersRouter);
-app.use('/api/transactions', transactionsRouter);
-app.use('/api/auth', authRouter);
+// Database Connection Logic
+let isConnected = false;
+const connectDB = async () => {
+  if (isConnected) return;
 
-// Connect to MongoDB
-const mongoUri = process.env.MONGODB_URI;
-if (!mongoUri) {
-  console.error('MONGODB_URI not set in environment. Please add it to .env');
-  process.exit(1);
-}
+  const mongoUri = process.env.MONGODB_URI;
+  if (!mongoUri) {
+    console.error('MONGODB_URI not set in environment.');
+    return;
+  }
 
-mongoose.connect(mongoUri)
-  .then(async () => {
+  try {
+    await mongoose.connect(mongoUri);
+    isConnected = true;
     console.log('Connected to MongoDB Atlas');
 
-    // Seed Admin User
-    // Seed Admin User
+    // Seed Admin User (Only runs once per connection, which is fine for serverless cold starts)
+    await seedAdmin();
+  } catch (err) {
+    console.error('Failed to connect to MongoDB Atlas:', err.message);
+  }
+};
+
+const seedAdmin = async () => {
+  try {
     // 1. Delete old default admin if exists
     await User.deleteOne({ username: 'admin' });
 
@@ -48,12 +55,32 @@ mongoose.connect(mongoUri)
       await adminUser.save();
       console.log('Admin user created: nikhil7058');
     }
+  } catch (error) {
+    console.error('Error seeding admin:', error);
+  }
+};
 
+// Middleware to ensure DB connection
+app.use(async (req, res, next) => {
+  await connectDB();
+  next();
+});
+
+// Routes
+app.use('/api/customers', customersRouter);
+app.use('/api/transactions', transactionsRouter);
+app.use('/api/auth', authRouter);
+
+// Root route for health check
+app.get('/', (req, res) => {
+  res.send('Ravi Udhary API is running');
+});
+
+// Only listen if running locally (not in Vercel)
+if (require.main === module) {
+  connectDB().then(() => {
     app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
-  })
-  .catch(err => {
-    console.error('Failed to connect to MongoDB Atlas:', err.message);
-    process.exit(1);
   });
+}
 
 module.exports = app;
